@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Device</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-md mx-auto bg-white p-6 rounded shadow">
+    <h2 class="text-xl font-bold mb-4">Edit Device</h2>
+
+    <form action="/edit/<%= device.id %>" method="POST" enctype="multipart/form-data" class="space-y-4">
+      <input type="text" name="name" placeholder="Nama Device" value="<%= device.name %>" class="w-full border px-3 py-2 rounded" required>
+      <input type="text" name="type" placeholder="Jenis Device" value="<%= device.type %>" class="w-full border px-3 py-2 rounded" required>
+
+      <!-- Foto device -->
+      <% if (device.photo) { %>
+        <div class="mb-2">
+          <label class="block text-gray-700 mb-1">Foto Saat Ini:</label>
+          <img src="<%= device.photo %>" alt="Foto Device" class="w-32 h-32 object-cover border rounded">
+        </div>
+      <% } %>
+
+      <label class="block text-gray-700">Ganti Foto (opsional):</label>
+      <input type="file" name="photo" accept="image/*" class="w-full border px-3 py-2 rounded">
+
+      <!-- QR Code -->
+      <% if (device.qrcode) { %>
+        <div class="mb-2">
+          <label class="block text-gray-700 mb-1">QR Code Saat Ini:</label>
+          <img src="<%= device.qrcode %>" alt="QR Code" class="w-32 h-32 object-contain border rounded">
+        </div>
+      <% } %>
+
+      <label class="block text-gray-700">Ganti QR Code (opsional):</label>
+      <input type="file" name="qrcode" accept="image/*" class="w-full border px-3 py-2 rounded">
+
+      <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Update</button>
+    </form>
+
+    <a href="/" class="text-blue-500 mt-4 inline-block hover:underline">Kembali</a>
+  </div>
+</body>
+</html>

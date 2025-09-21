@@ -1,0 +1,15 @@
+<% include('../layout') %>
+
+
+<div class="bg-white p-4 rounded shadow">
+<h2 class="text-xl font-semibold mb-4">Tambah Peminjaman</h2>
+
+
+<form action="/loans" method="POST">
+<label class="block mb-2">Peminjam</label>
+<input name="borrower" required class="w-full mb-3 p-2 border rounded" />
+
+
+<label class="block mb-2">Pilih Device</label>
+<select name="deviceId" required class="w-full mb-3 p-2 border rounded">
+<% devices.for

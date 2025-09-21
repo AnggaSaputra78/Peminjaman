@@ -1,0 +1,27 @@
+<% include('../layout') %>
+
+
+<div class="bg-white p-4 rounded shadow">
+<h2 class="text-xl font-semibold mb-4"><%= device ? 'Edit Device' : 'Tambah Device' %></h2>
+
+
+<form action="<%= device ? '/devices/' + device.id + '?_method=PUT' : '/devices' %>" method="POST">
+<label class="block mb-2">Nama</label>
+<input name="name" value="<%= device ? device.name : '' %>" required class="w-full mb-3 p-2 border rounded" />
+
+
+<label class="block mb-2">Jenis</label>
+<input name="type" value="<%= device ? device.type : '' %>" required class="w-full mb-3 p-2 border rounded" />
+
+
+<label class="block mb-2">Serial</label>
+<input name="serial" value="<%= device ? device.serial : '' %>" class="w-full mb-3 p-2 border rounded" />
+
+
+<label class="block mb-2">Condition</label>
+<input name="condition" value="<%= device ? device.condition : 'Baik' %>" class="w-full mb-3 p-2 border rounded" />
+
+
+<button class="px-4 py-2 bg-green-500 text-white rounded">Simpan</button>
+</form>
+</div>

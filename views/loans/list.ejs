@@ -1,0 +1,44 @@
+<% include('../layout') %>
+
+
+<div class="bg-white p-4 rounded shadow">
+<div class="flex justify-between items-center mb-4">
+<h2 class="text-xl font-semibold">Daftar Peminjaman</h2>
+<a href="/loans/create" class="px-3 py-1 bg-blue-500 text-white rounded">Tambah Peminjaman</a>
+</div>
+
+
+<table class="w-full table-auto">
+<thead>
+<tr>
+<th>ID</th>
+<th>Peminjam</th>
+<th>Device</th>
+<th>Mulai</th>
+<th>Akhir</th>
+<th>Status</th>
+<th>Aksi</th>
+</tr>
+</thead>
+<tbody>
+<% loans.forEach(l => { %>
+<tr>
+<td><%= l.id %></td>
+<td><%= l.borrower %></td>
+<td><%= l.Device ? l.Device.name : '—' %></td>
+<td><%= l.startDate %></td>
+<td><%= l.endDate || '-' %></td>
+<td><%= l.status %></td>
+<td>
+<% if (l.status === 'Dipinjam') { %>
+<form action="/loans/<%= l.id %>/return" method="POST" style="display:inline">
+<input type="hidden" name="endDate" value="<%= new Date().toISOString().slice(0,10) %>" />
+<button class="text-green-600">Kembalikan</button>
+</form>
+<% } %>
+</td>
+</tr>
+<% }) %>
+</tbody>
+</table>
+</div>

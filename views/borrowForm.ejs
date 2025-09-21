@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Form Peminjaman</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+
+  <div class="max-w-md mx-auto bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold mb-4 text-center">Form Peminjaman</h2>
+
+    <!-- Tampilkan nama device -->
+    <p class="mb-4">
+      <span class="font-semibold">Device:</span> <%= device.name %> (<%= device.type %>)
+    </p>
+
+    <!-- Form peminjaman -->
+    <form action="/borrow/<%= device.id %>" method="POST" class="space-y-4">
+      <!-- Nama peminjam -->
+      <div>
+        <label class="block font-medium mb-1">Nama Peminjam:</label>
+        <input type="text" name="borrower" required
+               class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Lokasi peminjaman -->
+      <div>
+        <label class="block font-medium mb-1">Lokasi Peminjaman:</label>
+        <input type="text" name="location" required
+               class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Tanggal pinjam (readonly) -->
+      <div>
+        <label class="block font-medium mb-1">Tanggal Pinjam:</label>
+        <input type="text" name="borrow_date" value="<%= new Date().toLocaleString() %>" readonly
+               class="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100 cursor-not-allowed">
+      </div>
+
+      <!-- Tombol submit -->
+      <div class="text-center">
+        <button type="submit"
+                class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+          Pinjam
+        </button>
+      </div>
+    </form>
+
+    <!-- Link kembali ke daftar device -->
+    <div class="text-center mt-4">
+      <a href="/" class="text-blue-500 hover:underline">Kembali ke daftar device</a>
+    </div>
+  </div>
+
+</body>
+</html>

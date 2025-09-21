@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Daftar Device</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      margin: 20px 0;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+      background: #fff;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    thead {
+      background: #e9ecef;
+    }
+    tr:nth-child(even) {
+      background: #f8f9fa;
+    }
+    img {
+      max-height: 50px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn {
+      padding: 6px 12px;
+      border-radius: 4px;
+      text-decoration: none;
+      color: #fff;
+      font-size: 14px;
+      transition: background 0.2s;
+      display: inline-block;
+    }
+    .btn-add { background: #0d6efd; margin-bottom: 15px; }
+    .btn-add:hover { background: #0b5ed7; }
+    .btn-edit { background: #ffc107; }
+    .btn-edit:hover { background: #e0a800; }
+    .btn-delete { background: #dc3545; }
+    .btn-delete:hover { background: #b02a37; }
+    .btn-borrow { background: #198754; }
+    .btn-borrow:hover { background: #157347; }
+    .btn-return { background: #0d6efd; }
+    .btn-return:hover { background: #0b5ed7; }
+    .status { font-style: italic; color: #6c757d; }
+    .status-danger { color: #dc3545; font-weight: bold; }
+    .actions { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+
+    /* Lightbox */
+    #lightbox {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+    }
+    #lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+      box-shadow: 0 0 20px #000;
+    }
+    #lightbox .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tabel Device -->
+  <h2>Daftar Device</h2>
+  <a href="/add" class="btn btn-add">Tambah Device</a>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nama</th>
+        <th>Jenis</th>
+        <th>Foto</th>
+        <th>QR Code</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% devices.forEach(device => { %>
+        <tr>
+          <td><%= device.id %></td>
+          <td><%= device.name %></td>
+          <td><%= device.type %></td>
+          <td>
+            <% if (device.photo) { %>
+              <img src="<%= device.photo %>" alt="Foto Device" onclick="openLightbox('<%= device.photo %>')">
+            <% } else { %>
+              <span class="status">Belum ada</span>
+            <% } %>
+          </td>
+          <td>
+            <% if (device.qrcode) { %>
+              <img src="<%= device.qrcode %>" alt="QR Code" onclick="openLightbox('<%= device.qrcode %>')">
+            <% } else { %>
+              <span class="status">Belum ada</span>
+            <% } %>
+          </td>
+          <td>
+            <div class="actions">
+              <a href="/edit/<%= device.id %>" class="btn btn-edit">Edit</a>
+              <a href="/delete/<%= device.id %>" class="btn btn-delete" onclick="return confirm('Hapus device ini?')">Hapus</a>
+              <a href="/borrow/<%= device.id %>" class="btn btn-borrow">Pinjam</a>
+            </div>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <!-- Tabel Peminjaman -->
+  <h2>Daftar Peminjaman</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nama Device</th>
+        <th>Jenis</th>
+        <th>Foto</th>
+        <th>QR Code</th>
+        <th>Tanggal Pinjam</th>
+        <th>Tanggal Kembali</th>
+        <th>Tempat Peminjaman</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% borrowings.forEach(b => { %>
+        <tr>
+          <td><%= b.deviceId %></td>
+          <td><%= b.deviceName %></td>
+          <td><%= b.type %></td>
+          <td>
+            <% if (b.photo) { %>
+              <img src="<%= b.photo %>" alt="<%= b.deviceName %>" onclick="openLightbox('<%= b.photo %>')">
+            <% } else { %>
+              <span class="status">Belum ada</span>
+            <% } %>
+          </td>
+          <td>
+            <% if (b.qrcode) { %>
+              <img src="<%= b.qrcode %>" alt="QR Code" onclick="openLightbox('<%= b.qrcode %>')">
+            <% } else { %>
+              <span class="status">Belum ada</span>
+            <% } %>
+          </td>
+          <td>
+            <% if (b.borrowedAt) { %>
+              <%= b.borrowedAt.toDate ? b.borrowedAt.toDate().toLocaleString() : new Date(b.borrowedAt).toLocaleString() %>
+            <% } else { %>-<% } %>
+          </td>
+          <td>
+            <% if (b.returnedAt) { %>
+              <%= b.returnedAt.toDate ? b.returnedAt.toDate().toLocaleString() : new Date(b.returnedAt).toLocaleString() %>
+            <% } else { %>
+              <span class="status-danger">Belum dikembalikan</span>
+            <% } %>
+          </td>
+          <td><%= b.location %></td>
+          <td>
+            <div class="actions">
+              <% if (!b.returnedAt) { %>
+                <a href="/return/<%= b.id %>" class="btn btn-return" onclick="return confirm('Kembalikan device ini?')">Kembalikan</a>
+              <% } else { %>
+                <span class="status">Selesai</span>
+              <% } %>
+              <a href="/deleteBorrow/<%= b.id %>" class="btn btn-delete" onclick="return confirm('Hapus data peminjaman ini?')">Hapus</a>
+            </div>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <!-- Lightbox -->
+  <div id="lightbox">
+    <span class="close-btn" onclick="closeLightbox()">&times;</span>
+    <img id="lightbox-img" src="">
+  </div>
+
+  <script>
+    function openLightbox(src) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').style.display = 'flex';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').style.display = 'none';
+    }
+
+    // Tutup jika klik di luar gambar
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+      if(e.target.id === 'lightbox') closeLightbox();
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+<% include('../layout') %>
+
+
+<div class="bg-white p-4 rounded shadow">
+<div class="flex justify-between items-center mb-4">
+<h2 class="text-xl font-semibold">Daftar Device</h2>
+<a href="/devices/create" class="px-3 py-1 bg-blue-500 text-white rounded">Tambah Device</a>
+</div>
+
+
+<table class="w-full table-auto">
+<thead>
+<tr>
+<th>ID</th>
+<th>Nama</th>
+<th>Jenis</th>
+<th>Serial</th>
+<th>Condition</th>
+<th>Aksi</th>
+</tr>
+</thead>
+<tbody>
+<% devices.forEach(d => { %>
+<tr>
+<td><%= d.id %></td>
+<td><%= d.name %></td>
+<td><%= d.type %></td>
+<td><%= d.serial %></td>
+<td><%= d.condition %></td>
+<td>
+<a href="/devices/<%= d.id %>/edit" class="mr-2 text-blue-600">Edit</a>
+<form action="/devices/<%= d.id %>?_method=DELETE" method="POST" style="display:inline">
+<button class="text-red-600">Hapus</button>
+</form>
+</td>
+</tr>
+<% }) %>
+</tbody>
+</table>
+</div>

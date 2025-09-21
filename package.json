@@ -1,0 +1,21 @@
+{
+  "name": "device-lending",
+  "version": "1.0.0",
+  "description": "Aplikasi Peminjaman Device sederhana dengan Node.js dan Express",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "firebase": "^12.3.0",
+    "firebase-admin": "^13.5.0",
+    "multer": "^2.0.2",
+    "qrcode": "^1.5.4"
+  }
+}
