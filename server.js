@@ -53,21 +53,37 @@ function toDateSafe(val) {
 }
 
 // -------------------------------
-// Halaman utama (generate QR untuk setiap device)
+// Halaman utama (dengan pencarian & filter)
 app.get("/", async (req, res) => {
   try {
+    const search = req.query.search ? req.query.search.toLowerCase() : "";
+    const typeFilter = req.query.type ? req.query.type.toLowerCase() : "";
+
     // ambil devices
     const snapshotDevices = await db.collection("devices").get();
-    const devicesRaw = snapshotDevices.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    let devicesRaw = snapshotDevices.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-    // generate QR untuk tiap device (dataURL)
+    // filter berdasarkan pencarian
+    if (search) {
+      devicesRaw = devicesRaw.filter(d =>
+        (d.name && d.name.toLowerCase().includes(search)) ||
+        (d.type && d.type.toLowerCase().includes(search))
+      );
+    }
+
+    // filter berdasarkan type
+    if (typeFilter) {
+      devicesRaw = devicesRaw.filter(d =>
+        d.type && d.type.toLowerCase() === typeFilter
+      );
+    }
+
+    // generate QR untuk tiap device
     const devices = await Promise.all(devicesRaw.map(async d => {
       try {
-        // gunakan string id sebagai payload QR
         const qrDataUrl = await QRCode.toDataURL(String(d.id));
         return { ...d, qr: qrDataUrl };
-      } catch (err) {
-        console.error("Gagal generate QR untuk", d.id, err);
+      } catch {
         return { ...d, qr: null };
       }
     }));
@@ -88,13 +104,12 @@ app.get("/", async (req, res) => {
       };
     });
 
-    res.render("index", { devices, borrowings });
+    res.render("index", { devices, borrowings, search, typeFilter });
   } catch (err) {
     console.error("Gagal render halaman utama:", err);
     res.status(500).send("Server error");
   }
 });
-
 // -------------------------------
 // -------------------------------
 // Tambah device (form + upload)

@@ -90,7 +90,23 @@
   </style>
 </head>
 <body>
+<div class="mb-4 flex gap-2">
+  <!-- Form Pencarian -->
+  <form method="GET" action="/" class="flex gap-2">
+    <input type="text" name="search" value="<%= search || '' %>"
+           placeholder="Cari device..." 
+           class="border px-3 py-2 rounded w-64">
+    
+    <select name="type" class="border px-3 py-2 rounded">
+      <option value="">-- Semua Jenis --</option>
+      <option value="laptop" <%= typeFilter === 'laptop' ? 'selected' : '' %>>Laptop</option>
+      <option value="printer" <%= typeFilter === 'printer' ? 'selected' : '' %>>Printer</option>
+      <option value="router" <%= typeFilter === 'router' ? 'selected' : '' %>>Router</option>
+    </select>
 
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Cari</button>
+  </form>
+</div>
   <!-- Tabel Device -->
   <h2>Daftar Device</h2>
   <a href="/add" class="btn btn-add">Tambah Device</a>
