@@ -2,12 +2,54 @@
 <html>
 <head>
   <title>Daftar Device</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f8f9fa;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: #0d6efd;
+      color: #fff;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .navbar .menu {
+      display: flex;
+      gap: 20px;
+    }
+    .navbar .menu a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.2s;
+    }
+    .navbar .menu a:hover {
+      opacity: 0.8;
+    }
+
+    /* Konten lama tetap */
+    body main {
       padding: 20px;
     }
+
     h2 {
       text-align: center;
       margin: 20px 0;
@@ -58,203 +100,161 @@
     .status-danger { color: #dc3545; font-weight: bold; }
     .actions { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
 
-    /* Form Pencarian */
-    .search-container {
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: center;
-    }
-    .search-form {
-      display: flex;
-      gap: 10px;
-      background: #fff;
-      padding: 12px 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      align-items: center;
-    }
-    .search-form input,
-    .search-form select {
-      padding: 8px 12px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-    .search-form button {
-      background: #0d6efd;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      padding: 8px 14px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .search-form button:hover {
-      background: #0b5ed7;
-    }
+    /* Search & Lightbox tetap seperti sebelumnya */
+    .search-container { margin-bottom: 20px; display: flex; justify-content: center; }
+    .search-form { display: flex; gap: 10px; background: #fff; padding: 12px 16px; border: 1px solid #ccc; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); align-items: center; }
+    .search-form input, .search-form select { padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+    .search-form button { background: #0d6efd; color: #fff; border: none; border-radius: 4px; padding: 8px 14px; font-size: 14px; cursor: pointer; transition: background 0.2s; }
+    .search-form button:hover { background: #0b5ed7; }
 
-    /* Lightbox */
-    #lightbox {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.8);
-      justify-content: center;
-      align-items: center;
-    }
-    #lightbox img {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 8px;
-      box-shadow: 0 0 20px #000;
-    }
-    #lightbox .close-btn {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      color: #fff;
-      font-size: 40px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+    #lightbox { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; }
+    #lightbox img { max-width: 90%; max-height: 90%; border-radius: 8px; box-shadow: 0 0 20px #000; }
+    #lightbox .close-btn { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; }
+    
+    /* Pesan tabel kosong */
+    .empty-table { text-align: center; padding: 40px; color: #6c757d; font-style: italic; }
   </style>
 </head>
 <body>
 
-  <!-- Form Pencarian -->
-  <div class="search-container">
-    <form method="GET" action="/" class="search-form">
-      <input type="text" name="search" value="<%= search || '' %>"
-             placeholder="Cari device...">
-      
-      <select name="type">
-        <option value="">-- Semua Jenis --</option>
-        <option value="laptop" <%= typeFilter === 'laptop' ? 'selected' : '' %>>Laptop</option>
-        <option value="printer" <%= typeFilter === 'printer' ? 'selected' : '' %>>Printer</option>
-        <option value="router" <%= typeFilter === 'router' ? 'selected' : '' %>>Router</option>
-      </select>
-
-      <button type="submit">Cari</button>
-    </form>
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <i class="fas fa-laptop-code"></i> Device Manager
+    </div>
+    <div class="menu">
+      <a href="/"><i class="fas fa-home"></i> Home</a>
+      <a href="#devices"><i class="fas fa-desktop"></i> Device</a>
+      <a href="#borrowings"><i class="fas fa-book"></i> Peminjaman</a>
+      <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
   </div>
-
-  <!-- Tabel Device -->
-  <h2>Daftar Device</h2>
-  <a href="/add" class="btn btn-add">Tambah Device</a>
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nama</th>
-        <th>Jenis</th>
-        <th>Foto</th>
-        <th>QR Code</th>
-        <th>Aksi</th>
-      </tr>
-    </thead>
-    <tbody>
+  
+    <!-- Form Pencarian -->
+    <div class="search-container">
+      <form method="GET" action="/" class="search-form">
+        <input type="text" name="search" value="<%= search || '' %>" placeholder="Cari device...">
+        <select name="type">
+          <option value="">-- Semua Jenis --</option>
+          <option value="laptop" <%= typeFilter === 'laptop' ? 'selected' : '' %>>Laptop</option>
+          <option value="printer" <%= typeFilter === 'printer' ? 'selected' : '' %>>Printer</option>
+          <option value="router" <%= typeFilter === 'router' ? 'selected' : '' %>>Router</option>
+        </select>
+        <button type="submit">Cari</button>
+      </form>
+    </div>
+    
+ <!-- Tabel Device -->
+<h2 id="devices" class="text-xl font-bold text-gray-700 my-4">Daftar Device</h2>
+<a href="/add" class="btn btn-add">Tambah Device</a>
+<table class="min-w-full border border-gray-300 bg-white shadow-md rounded-lg overflow-hidden">
+  <thead class="bg-gray-100">
+    <tr>
+      <th class="border px-4 py-2">ID</th>
+      <th class="border px-4 py-2">Nama</th>
+      <th class="border px-4 py-2">Jenis</th>
+      <th class="border px-4 py-2">Foto</th>
+      <th class="border px-4 py-2">Aksi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (devices && devices.length > 0) { %>
       <% devices.forEach(device => { %>
-        <tr>
-          <td><%= device.id %></td>
-          <td><%= device.name %></td>
-          <td><%= device.type %></td>
-          <td>
+        <tr class="hover:bg-gray-50">
+          <td class="border px-4 py-2"><%= device.id %></td>
+          <td class="border px-4 py-2"><%= device.name %></td>
+          <td class="border px-4 py-2 capitalize"><%= device.type %></td>
+          <td class="border px-4 py-2">
             <% if (device.photo) { %>
-              <img src="<%= device.photo %>" alt="Foto Device" onclick="openLightbox('<%= device.photo %>')">
+              <img src="<%= device.photo %>" alt="Foto Device" class="h-12 mx-auto rounded shadow cursor-pointer" onclick="openLightbox('<%= device.photo %>')">
             <% } else { %>
               <span class="status">Belum ada</span>
             <% } %>
           </td>
-          <td>
-            <% if (device.qrcode) { %>
-              <img src="<%= device.qrcode %>" alt="QR Code" onclick="openLightbox('<%= device.qrcode %>')">
-            <% } else { %>
-              <span class="status">Belum ada</span>
-            <% } %>
-          </td>
-          <td>
-            <div class="actions">
+          <td class="border px-4 py-2">
+            <div class="flex justify-center gap-2 flex-wrap">
               <a href="/edit/<%= device.id %>" class="btn btn-edit">Edit</a>
               <a href="/delete/<%= device.id %>" class="btn btn-delete" onclick="return confirm('Hapus device ini?')">Hapus</a>
-              <a href="/borrow/<%= device.id %>" class="btn btn-borrow">Pinjam</a>
+              <a href="/peminjaman/create/<%= device.id %>" 
+                class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Pinjam</a>
             </div>
           </td>
         </tr>
       <% }) %>
-    </tbody>
-  </table>
-
-  <!-- Tabel Peminjaman -->
-  <h2>Daftar Peminjaman</h2>
-  <table>
-    <thead>
+    <% } else { %>
       <tr>
-        <th>ID</th>
-        <th>Nama Device</th>
-        <th>Jenis</th>
-        <th>Foto</th>
-        <th>QR Code</th>
-        <th>Tanggal Pinjam</th>
-        <th>Tanggal Kembali</th>
-        <th>Tempat Peminjaman</th>
-        <th>Aksi</th>
+        <td colspan="5" class="empty-table border px-4 py-8">
+          <i class="fas fa-inbox text-4xl mb-2"></i><br>
+          Tidak ada data device
+        </td>
       </tr>
-    </thead>
-    <tbody>
+    <% } %>
+  </tbody>
+</table>
+
+<!-- Tabel Peminjaman -->
+<h2 id="borrowings" class="text-xl font-bold text-gray-700 my-4">Daftar Peminjaman</h2>
+<table class="min-w-full border border-gray-300 bg-white shadow-md rounded-lg overflow-hidden">
+  <thead class="bg-gray-100">
+    <tr>
+      <th class="border px-4 py-2">Nama Peminjam</th>
+      <th class="border px-4 py-2">Nama Device</th>
+      <th class="border px-4 py-2">Jenis</th>
+      <th class="border px-4 py-2">Tanggal Pinjam</th>
+      <th class="border px-4 py-2">Keterangan</th>
+      <th class="border px-4 py-2">Status</th>
+      <th class="border px-4 py-2">Aksi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (borrowings && borrowings.length > 0) { %>
       <% borrowings.forEach(b => { %>
-        <tr>
-          <td><%= b.deviceId %></td>
-          <td><%= b.deviceName %></td>
-          <td><%= b.type %></td>
-          <td>
-            <% if (b.photo) { %>
-              <img src="<%= b.photo %>" alt="<%= b.deviceName %>" onclick="openLightbox('<%= b.photo %>')">
+        <tr class="hover:bg-gray-50">
+          <td class="border px-4 py-2"><%= b.borrower_name || b.borrower %></td>
+          <td class="border px-4 py-2"><%= b.device_name || b.deviceName %></td>
+          <td class="border px-4 py-2 capitalize"><%= b.device_type || b.type %></td>
+          <td class="border px-4 py-2">
+            <% if (b.borrow_date) { %>
+              <%= b.borrow_date %>
+            <% } else if (b.borrowedAt) { %>
+              <%= b.borrowedAt.toDate ? b.borrowedAt.toDate().toLocaleDateString('id-ID') : new Date(b.borrowedAt).toLocaleDateString('id-ID') %>
             <% } else { %>
-              <span class="status">Belum ada</span>
+              -
             <% } %>
           </td>
-          <td>
-            <% if (b.qrcode) { %>
-              <img src="<%= b.qrcode %>" alt="QR Code" onclick="openLightbox('<%= b.qrcode %>')">
+          <td class="border px-4 py-2"><%= b.return_info || b.location %></td>
+          <td class="border px-4 py-2">
+            <% if (b.returnedAt || b.status === 'returned') { %>
+              <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Selesai</span>
             <% } else { %>
-              <span class="status">Belum ada</span>
+              <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Aktif</span>
             <% } %>
           </td>
-          <td>
-            <% if (b.borrowedAt) { %>
-              <%= b.borrowedAt.toDate ? b.borrowedAt.toDate().toLocaleString() : new Date(b.borrowedAt).toLocaleString() %>
-            <% } else { %>-<% } %>
-          </td>
-          <td>
-            <% if (b.returnedAt) { %>
-              <%= b.returnedAt.toDate ? b.returnedAt.toDate().toLocaleString() : new Date(b.returnedAt).toLocaleString() %>
-            <% } else { %>
-              <span class="status-danger">Belum dikembalikan</span>
-            <% } %>
-          </td>
-          <td><%= b.location %></td>
-          <td>
-            <div class="actions">
-              <% if (!b.returnedAt) { %>
-                <a href="/return/<%= b.id %>" class="btn btn-return" onclick="return confirm('Kembalikan device ini?')">Kembalikan</a>
+          <td class="border px-4 py-2">
+            <div class="flex justify-center gap-2 flex-wrap">
+              <% if (!b.returnedAt && b.status !== 'returned') { %>
+                <a href="/returnBorrow/<%= b.id %>" class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600" 
+                   onclick="return confirm('Kembalikan device ini?')">Kembalikan</a>
               <% } else { %>
-                <span class="status">Selesai</span>
+                <span class="text-gray-500 text-xs">Selesai</span>
               <% } %>
-              <a href="/deleteBorrow/<%= b.id %>" class="btn btn-delete" onclick="return confirm('Hapus data peminjaman ini?')">Hapus</a>
+              <a href="/deleteBorrow/<%= b.id %>" class="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600" 
+                 onclick="return confirm('Hapus data peminjaman ini?')">Hapus</a>
+              <a href="/peminjaman/download/<%= b.id %>" class="bg-green-500 text-white px-3 py-1 rounded text-xs hover:bg-green-600">PDF</a>
             </div>
           </td>
         </tr>
       <% }) %>
-    </tbody>
-  </table>
-
+    <% } else { %>
+      <tr>
+        <td colspan="7" class="empty-table border px-4 py-8 text-center">
+          <i class="fas fa-inbox text-4xl mb-2 text-gray-400"></i><br>
+          Tidak ada data peminjaman
+        </td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>
   <!-- Lightbox -->
   <div id="lightbox">
     <span class="close-btn" onclick="closeLightbox()">&times;</span>

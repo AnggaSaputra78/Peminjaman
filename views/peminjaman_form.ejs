@@ -1,0 +1,50 @@
+  <!DOCTYPE html>
+  <html lang="id">
+  <head>
+    <meta charset="UTF-8">
+    <title>Form Peminjaman</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css">
+  </head>
+  <body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+      <h1 class="text-2xl font-bold mb-6 text-center">Form Peminjaman</h1>
+
+      <form action="/peminjaman/store" method="POST" class="space-y-4">
+        <!-- Nama Peminjam -->
+        <div>
+          <label class="block font-semibold">Nama Peminjam</label>
+          <input type="text" name="borrower_name" class="w-full p-2 border rounded" required>
+        </div>
+
+        <!-- Pilih Device -->
+        <div>
+          <label class="block font-semibold">Pilih Device</label>
+          <select name="device_id" class="w-full p-2 border rounded" required>
+            <option value="">-- Pilih Device --</option>
+            <% devices.forEach(device => { %>
+              <option value="<%= device.id %>">
+                <%= device.name %> (<%= device.type %>)
+              </option>
+            <% }) %>
+          </select>
+        </div>
+
+        <!-- Tanggal Pinjam -->
+        <div>
+          <label class="block font-semibold">Tanggal Pinjam</label>
+          <input type="date" name="borrow_date" class="w-full p-2 border rounded" required>
+        </div>
+
+        <div>
+          <label for="return_info" class="block font-semibold mb-1">Keterangan</label>
+          <input type="text" name="return_info" id="return_info" placeholder="Contoh: Lab RPL 4" class="w-full p-2 border rounded">
+        </div>
+
+        <!-- Tombol Submit -->
+        <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
+          Simpan
+        </button>
+      </form>
+    </div>
+  </body>
+  </html>

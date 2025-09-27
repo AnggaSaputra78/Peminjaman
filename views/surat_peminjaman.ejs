@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Surat Peminjaman</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h2 { text-align: center; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    td, th { border: 1px solid #000; padding: 8px; }
+  </style>
+</head>
+<body>
+  <h2>Surat Peminjaman Barang</h2>
+
+  <p>Yang bertanda tangan di bawah ini:</p>
+  <p><b>Nama Peminjam:</b> <%= surat.borrowerName %></p>
+  <p><b>Lokasi:</b> <%= surat.location %></p>
+
+  <p>Menyatakan telah meminjam barang berikut:</p>
+
+  <table>
+    <tr><th>Nama Device</th><td><%= surat.deviceName %></td></tr>
+    <tr><th>Jenis</th><td><%= surat.type %></td></tr>
+    <tr><th>Tanggal Pinjam</th><td><%= surat.borrowedAt %></td></tr>
+  </table>
+
+  <form action="/peminjaman/simpan" method="POST">
+    <input type="hidden" name="deviceId" value="<%= surat.deviceId %>">
+    <input type="hidden" name="borrowerName" value="<%= surat.borrowerName %>">
+    <input type="hidden" name="location" value="<%= surat.location %>">
+    <button type="submit" style="margin-top:20px; padding:10px 20px; background:green; color:white;">Simpan Peminjaman</button>
+  </form>
+</body>
+</html>

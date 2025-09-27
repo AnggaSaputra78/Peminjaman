@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Preview Surat Peminjaman</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-2xl">
+    <h1 class="text-2xl font-bold mb-6 text-center">Preview Surat Peminjaman</h1>
+
+    <% if (typeof peminjaman !== 'undefined') { %>
+      <div class="space-y-4 mb-6">
+        <p><b>Nama Peminjam:</b> <%= peminjaman.borrower_name %></p>
+        <p><b>Device:</b> <%= peminjaman.device_name %> (<%= peminjaman.device_type %>)</p>
+        <p><b>Tanggal Pinjam:</b> <%= peminjaman.borrow_date %></p>
+        <p><b>Lokasi/Keterangan:</b> <%= peminjaman.return_info %></p>
+        <p><b>ID Peminjaman:</b> <code class="bg-gray-100 px-2 py-1 rounded"><%= peminjaman.id %></code></p>
+        <p><b>Status:</b> <span class="bg-green-100 text-green-800 px-2 py-1 rounded">Aktif</span></p>
+        
+        <!-- Info QR Code -->
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
+          <div class="flex items-center">
+            <i class="fas fa-qrcode text-blue-500 text-xl mr-2"></i>
+            <span class="font-semibold">Fitur QR Code</span>
+          </div>
+          <p class="text-sm text-blue-700 mt-1">
+            Surat PDF akan dilengkapi dengan QR Code untuk verifikasi keaslian dokumen.
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-6 flex justify-between items-center">
+        <a href="/" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+          <i class="fas fa-home mr-2"></i>Kembali ke Home
+        </a>
+        
+        <div class="flex gap-3">
+          <a href="/peminjaman/verify/<%= peminjaman.id %>" 
+             class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600">
+            <i class="fas fa-search mr-2"></i>Verifikasi
+          </a>
+          <a href="/peminjaman/download/<%= peminjaman.id %>" 
+             class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            <i class="fas fa-download mr-2"></i>Download PDF
+          </a>
+        </div>
+      </div>
+      
+      <!-- Form untuk konfirmasi penyimpanan -->
+      <form id="confirmForm" action="/peminjaman/confirm/<%= peminjaman.id %>" method="POST" class="mt-6">
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded w-full hover:bg-green-700">
+          <i class="fas fa-check-circle mr-2"></i>Konfirmasi dan Simpan Peminjaman
+        </button>
+      </form>
+      
+    <% } else { %>
+      <div class="text-red-500 text-center">
+        <i class="fas fa-exclamation-triangle text-3xl mb-2"></i>
+        <p class="text-lg">Data peminjaman tidak tersedia.</p>
+        <a href="/" class="text-blue-600 underline mt-2 inline-block">Kembali ke Home</a>
+      </div>
+    <% } %>
+  </div>
+
+  <script>
+    // Konfirmasi sebelum menyimpan
+    document.getElementById('confirmForm').addEventListener('submit', function(e) {
+      if (!confirm('Apakah Anda yakin ingin menyimpan data peminjaman ini?')) {
+        e.preventDefault();
+      }
+    });
+  </script>
+</body>
+</html>
