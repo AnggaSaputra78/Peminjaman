@@ -1,3 +1,4 @@
+<img width="1894" height="942" alt="Screenshot 2026-06-06 083321" src="https://github.com/user-attachments/assets/96012ca2-1fba-41be-8f65-67c63e40ae00" />
 # 🏫 SIMINBAR (Sistem Informasi Manajemen Inventaris Barang)
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
